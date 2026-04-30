@@ -26,7 +26,7 @@ export default function GameTile({ char, status, isActive, animationDelay = 0 }:
       <div className={`tile ${isRevealed ? 'flipped' : ''}`}>
         {/* Front face */}
         <div
-          className={`tile-face tile-front flex items-center justify-center text-2xl font-bold font-mono uppercase select-none
+          className={`tile-face flex items-center justify-center text-2xl font-bold font-mono uppercase select-none
             border-2 transition-colors
             ${isEmpty ? 'border-[#3a3a3c] bg-transparent text-white' : ''}
             ${char && !status ? (isActive ? 'border-[#565758] bg-transparent text-white scale-[1.05]' : 'border-[#565758] bg-transparent text-white') : ''}

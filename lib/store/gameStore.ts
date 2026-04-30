@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { getTodayKey } from '../utils/date';
 import { validateGuess } from '../engine/validator';
 import { getFeedback, TileStatus } from '../engine/feedback';
+import { evaluate } from '../engine/evaluator';
 import puzzles from '../../data/puzzles.json';
 
 export type GameStatus = 'playing' | 'won' | 'lost';
@@ -144,7 +145,6 @@ export const useGameStore = create<GameStore>()(
         if (mode === 'easy' && target !== null) {
           const eqIdx = currentGuess.indexOf('=');
           const rhs = currentGuess.slice(eqIdx + 1);
-          const { evaluate } = require('../engine/evaluator');
           try {
             const rhsVal = evaluate(rhs);
             if (Math.abs(rhsVal - target) > 1e-9) {

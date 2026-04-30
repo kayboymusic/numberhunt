@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code
+/.claude/
+
+# local screenshots
+/Screenshot*.png
+/gradient.png
