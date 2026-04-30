@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wait)",
+      "Bash(mv /tmp/numberhunt-docs/*.md /Users/macbookair/Desktop/numberhunt/)",
+      "Bash(npm install *)"
+    ]
+  }
+}
