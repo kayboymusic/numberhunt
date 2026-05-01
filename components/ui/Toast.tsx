@@ -15,7 +15,7 @@ export default function Toast() {
 
   return (
     <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-toast-in">
-      <div className="bg-white text-[#111113] text-sm font-mono font-semibold px-4 py-2 rounded shadow-lg">
+      <div className="bg-[var(--text)] text-[var(--bg)] text-sm font-mono font-semibold px-4 py-2 rounded shadow-lg">
         {toast}
       </div>
     </div>

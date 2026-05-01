@@ -11,7 +11,7 @@ interface GameTileProps {
 const statusStyles: Record<TileStatus, string> = {
   correct: 'bg-[#538d4e] border-[#538d4e] text-white',
   present: 'bg-[#b59f3b] border-[#b59f3b] text-white',
-  absent: 'bg-[#3a3a3c] border-[#3a3a3c] text-white',
+  absent: 'bg-[var(--tile-absent)] border-[var(--tile-absent)] text-white',
 };
 
 export default function GameTile({ char, status, isActive, animationDelay = 0 }: GameTileProps) {
@@ -28,8 +28,8 @@ export default function GameTile({ char, status, isActive, animationDelay = 0 }:
         <div
           className={`tile-face flex items-center justify-center text-2xl font-bold font-mono uppercase select-none
             border-2 transition-colors
-            ${isEmpty ? 'border-[#3a3a3c] bg-transparent text-white' : ''}
-            ${char && !status ? (isActive ? 'border-[#565758] bg-transparent text-white scale-[1.05]' : 'border-[#565758] bg-transparent text-white') : ''}
+            ${isEmpty ? 'border-[var(--tile-empty-border)] bg-transparent text-[var(--text)]' : ''}
+            ${char && !status ? (isActive ? 'border-[var(--tile-active-border)] bg-transparent text-[var(--text)] scale-[1.05]' : 'border-[var(--tile-active-border)] bg-transparent text-[var(--text)]') : ''}
           `}
         >
           {char}
@@ -37,7 +37,7 @@ export default function GameTile({ char, status, isActive, animationDelay = 0 }:
         {/* Back face (revealed) */}
         <div
           className={`tile-face tile-back flex items-center justify-center text-2xl font-bold font-mono uppercase select-none
-            border-2 ${status ? statusStyles[status] : 'bg-transparent border-[#3a3a3c]'}
+            border-2 ${status ? statusStyles[status] : 'bg-transparent border-[var(--tile-empty-border)]'}
           `}
         >
           {char}

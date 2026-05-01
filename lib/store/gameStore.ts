@@ -8,6 +8,7 @@ import puzzles from '../../data/puzzles.json';
 
 export type GameStatus = 'playing' | 'won' | 'lost';
 export type GameMode = 'easy' | 'hard';
+export type Theme = 'light' | 'dark';
 
 interface GameState {
   solution: string;
@@ -21,6 +22,8 @@ interface GameState {
   streak: number;
   lastPlayed: string;
   toast: string | null;
+  hasStarted: boolean;
+  theme: Theme;
 }
 
 interface GameActions {
@@ -30,6 +33,8 @@ interface GameActions {
   setMode: (mode: GameMode) => void;
   clearToast: () => void;
   loadGame: () => void;
+  start: () => void;
+  toggleTheme: () => void;
 }
 
 type GameStore = GameState & GameActions;
@@ -67,6 +72,18 @@ export const useGameStore = create<GameStore>()(
       streak: 0,
       lastPlayed: '',
       toast: null,
+      hasStarted: false,
+      theme: 'dark',
+
+      start: () => set({ hasStarted: true }),
+
+      toggleTheme: () => {
+        const next: Theme = get().theme === 'dark' ? 'light' : 'dark';
+        if (typeof document !== 'undefined') {
+          document.documentElement.classList.toggle('dark', next === 'dark');
+        }
+        set({ theme: next });
+      },
 
       loadGame: () => {
         const today = getTodayKey();
@@ -183,6 +200,7 @@ export const useGameStore = create<GameStore>()(
         lastPlayed: state.lastPlayed,
         solution: state.solution,
         target: state.target,
+        theme: state.theme,
       }),
     }
   )

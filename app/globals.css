@@ -5,14 +5,41 @@
   --font-display: var(--font-syne), sans-serif;
 }
 
+/* Light theme (default) */
 :root {
-  --bg: #111113;
-  --surface: #1a1a1b;
-  --border: #3a3a3c;
-  --text: #ffffff;
+  --bg: #ffffff;
+  --surface: #f6f7f8;
+  --surface-2: #ebeced;
+  --border: #d3d6da;
+  --text: #1a1a1b;
+  --text-muted: #787c7e;
+  --text-subtle: #b3b6ba;
+  --tile-empty-border: #d3d6da;
+  --tile-active-border: #878a8c;
+  --tile-absent: #787c7e;
+  --key-default: #d3d6da;
+  --key-default-text: #1a1a1b;
+  --key-default-hover: #bbbdc0;
+
+  /* Brand colors — same in both themes */
   --green: #538d4e;
   --yellow: #b59f3b;
-  --grey: #3a3a3c;
+}
+
+:root.dark {
+  --bg: #111113;
+  --surface: #1a1a1b;
+  --surface-2: #111113;
+  --border: #3a3a3c;
+  --text: #ffffff;
+  --text-muted: #818384;
+  --text-subtle: #3a3a3c;
+  --tile-empty-border: #3a3a3c;
+  --tile-active-border: #565758;
+  --tile-absent: #3a3a3c;
+  --key-default: #818384;
+  --key-default-text: #ffffff;
+  --key-default-hover: #919394;
 }
 
 * {
@@ -65,6 +92,12 @@ body {
 .tile-back {
   transform: rotateX(180deg);
 }
+
+/* Theme-toggle icon swap (driven by .dark class on <html>) */
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: block; }
+.dark .theme-icon-sun { display: block; }
+.dark .theme-icon-moon { display: none; }
 
 /* Toast animation */
 @keyframes toast-in {

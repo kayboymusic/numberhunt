@@ -14,7 +14,7 @@ const STATUS_PRIORITY: Record<TileStatus, number> = { correct: 3, present: 2, ab
 const KEY_STYLES: Record<TileStatus, string> = {
   correct: 'bg-[#538d4e] text-white border-[#538d4e]',
   present: 'bg-[#b59f3b] text-white border-[#b59f3b]',
-  absent: 'bg-[#3a3a3c] text-[#818384] border-[#3a3a3c]',
+  absent: 'bg-[var(--tile-absent)] text-white border-[var(--tile-absent)] opacity-70',
 };
 
 export default function Keyboard() {
@@ -69,7 +69,7 @@ export default function Keyboard() {
                   rounded border
                   transition-all duration-150 active:scale-95
                   ${isWide ? 'px-3 sm:px-4 py-4 text-xs sm:text-sm' : 'w-10 sm:w-12 py-4'}
-                  ${status ? KEY_STYLES[status] : 'bg-[#818384] text-white border-[#818384] hover:bg-[#919394]'}
+                  ${status ? KEY_STYLES[status] : 'bg-[var(--key-default)] text-[var(--key-default-text)] border-[var(--key-default)] hover:bg-[var(--key-default-hover)]'}
                 `}
               >
                 {key}
