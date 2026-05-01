@@ -4,7 +4,6 @@ import { persist } from 'zustand/middleware';
 import { getTodayKey } from '../utils/date';
 import { validateGuess } from '../engine/validator';
 import { getFeedback, TileStatus } from '../engine/feedback';
-import { evaluate } from '../engine/evaluator';
 import puzzles from '../../data/puzzles.json';
 
 export type GameStatus = 'playing' | 'won' | 'lost';
@@ -37,6 +36,11 @@ type GameStore = GameState & GameActions;
 
 const MAX_ATTEMPTS = 6;
 
+export const EQUATION_LENGTH: Record<GameMode, number> = {
+  easy: 8,
+  hard: 10,
+};
+
 function getPuzzle(date: string, mode: GameMode): { solution: string; target: number | null } {
   const data = (puzzles as Record<string, { easy: { target: number; solution: string }; hard: { solution: string } }>)[date];
   if (!data) {
@@ -47,18 +51,6 @@ function getPuzzle(date: string, mode: GameMode): { solution: string; target: nu
     return { solution: data.easy.solution, target: data.easy.target };
   }
   return { solution: data.hard.solution, target: null };
-}
-
-function initialGameState(date: string, mode: GameMode): Pick<GameState, 'solution' | 'target' | 'currentGuess' | 'guesses' | 'statuses' | 'gameStatus'> {
-  const { solution, target } = getPuzzle(date, mode);
-  return {
-    solution,
-    target,
-    currentGuess: '',
-    guesses: [],
-    statuses: [],
-    gameStatus: 'playing',
-  };
 }
 
 export const useGameStore = create<GameStore>()(
@@ -114,9 +106,9 @@ export const useGameStore = create<GameStore>()(
       },
 
       addChar: (char) => {
-        const { currentGuess, gameStatus } = get();
+        const { currentGuess, gameStatus, mode } = get();
         if (gameStatus !== 'playing') return;
-        if (currentGuess.length >= 8) return;
+        if (currentGuess.length >= EQUATION_LENGTH[mode]) return;
         set({ currentGuess: currentGuess + char });
       },
 
@@ -127,34 +119,18 @@ export const useGameStore = create<GameStore>()(
       },
 
       submitGuess: () => {
-        const { currentGuess, solution, guesses, statuses, gameStatus, streak, mode, target } = get();
+        const { currentGuess, solution, guesses, statuses, gameStatus, streak, mode } = get();
         if (gameStatus !== 'playing') return;
 
-        if (currentGuess.length !== 8) {
+        if (currentGuess.length !== EQUATION_LENGTH[mode]) {
           set({ toast: 'Not enough characters' });
           return;
         }
 
-        const validation = validateGuess(currentGuess);
+        const validation = validateGuess(currentGuess, EQUATION_LENGTH[mode]);
         if (!validation.valid) {
           set({ toast: validation.reason });
           return;
-        }
-
-        // In easy mode, enforce the target result
-        if (mode === 'easy' && target !== null) {
-          const eqIdx = currentGuess.indexOf('=');
-          const rhs = currentGuess.slice(eqIdx + 1);
-          try {
-            const rhsVal = evaluate(rhs);
-            if (Math.abs(rhsVal - target) > 1e-9) {
-              set({ toast: `Equation must equal ${target}` });
-              return;
-            }
-          } catch {
-            set({ toast: 'Invalid equation' });
-            return;
-          }
         }
 
         const feedback = getFeedback(currentGuess, solution);

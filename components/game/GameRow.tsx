@@ -6,10 +6,11 @@ interface GameRowProps {
   guess: string;
   statuses?: TileStatus[];
   isActive?: boolean;
+  length: number;
 }
 
-export default function GameRow({ guess, statuses, isActive }: GameRowProps) {
-  const tiles = Array.from({ length: 8 }, (_, i) => ({
+export default function GameRow({ guess, statuses, isActive, length }: GameRowProps) {
+  const tiles = Array.from({ length }, (_, i) => ({
     char: guess[i] ?? '',
     status: statuses?.[i],
   }));

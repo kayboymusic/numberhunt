@@ -11,9 +11,9 @@ function hasLeadingZero(expr: string): boolean {
   return /(?<![0-9])0[0-9]/.test(expr);
 }
 
-export function validateGuess(guess: string): ValidationResult {
-  if (guess.length !== 8) {
-    return { valid: false, reason: 'Equation must be exactly 8 characters' };
+export function validateGuess(guess: string, length: number = 8): ValidationResult {
+  if (guess.length !== length) {
+    return { valid: false, reason: `Equation must be exactly ${length} characters` };
   }
 
   if (!ALLOWED.test(guess)) {
