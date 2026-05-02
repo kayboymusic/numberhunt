@@ -1,6 +1,9 @@
 'use client';
+import { useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { useGameStore } from '@/lib/store/gameStore';
 import { TileStatus } from '@/lib/engine/feedback';
+import ShareButtons from '@/components/ui/ShareButtons';
 
 const EMOJI: Record<TileStatus, string> = {
   correct: '🟩',
@@ -8,9 +11,62 @@ const EMOJI: Record<TileStatus, string> = {
   absent: '⬛',
 };
 
+function celebrate() {
+  const colors = [
+    '#ff3366', // hot pink
+    '#00d9ff', // cyan
+    '#b537f2', // purple
+    '#ff8c00', // orange
+    '#facc15', // bright yellow
+    '#06ffa5', // mint
+    '#ff3838', // red
+    '#538d4e', // brand green
+  ];
+
+  confetti({
+    particleCount: 90,
+    angle: 90,
+    spread: 110,
+    startVelocity: 38,
+    origin: { x: 0.5, y: -0.05 },
+    colors,
+    gravity: 0.9,
+    ticks: 400,
+    disableForReducedMotion: true,
+  });
+
+  const end = Date.now() + 1800;
+  const interval = window.setInterval(() => {
+    if (Date.now() > end) {
+      window.clearInterval(interval);
+      return;
+    }
+    confetti({
+      particleCount: 5,
+      angle: 90,
+      spread: 60,
+      startVelocity: 25,
+      origin: { x: Math.random(), y: -0.05 },
+      colors,
+      gravity: 0.8,
+      ticks: 300,
+      disableForReducedMotion: true,
+    });
+  }, 80);
+
+  return () => window.clearInterval(interval);
+}
+
 export default function WinModal() {
   const { gameStatus, guesses, statuses, streak, solution, mode } = useGameStore();
-  if (gameStatus !== 'won') return null;
+  const hasWon = gameStatus === 'won';
+
+  useEffect(() => {
+    if (!hasWon) return;
+    return celebrate();
+  }, [hasWon]);
+
+  if (!hasWon) return null;
 
   const shareText = [
     `NumberHunt ${new Date().toLocaleDateString()} (${mode})`,
@@ -18,14 +74,6 @@ export default function WinModal() {
     '',
     ...statuses.map((row) => row.map((s) => EMOJI[s]).join('')),
   ].join('\n');
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({ text: shareText });
-    } else {
-      navigator.clipboard.writeText(shareText);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-40 p-4">
@@ -36,9 +84,9 @@ export default function WinModal() {
           Solved in <span className="text-[var(--text)] font-bold">{guesses.length}</span> attempt{guesses.length !== 1 ? 's' : ''}
         </p>
 
-        <div className="flex justify-center gap-1 mb-4">
+        <div className="flex flex-col items-center gap-0.5 mb-4">
           {statuses.map((row, ri) => (
-            <div key={ri} className="flex flex-col gap-0.5">
+            <div key={ri} className="flex gap-0.5">
               {row.map((s, ci) => (
                 <div
                   key={ci}
@@ -61,12 +109,8 @@ export default function WinModal() {
           <span>Streak: <span className="text-[var(--text)] font-bold">{streak}</span></span>
         </div>
 
-        <button
-          onClick={handleShare}
-          className="w-full bg-[#538d4e] hover:bg-[#4a7d45] text-white font-mono font-bold py-2.5 rounded-lg transition-colors"
-        >
-          Share Result
-        </button>
+        <p className="text-[var(--text-muted)] font-mono text-xs mb-2 uppercase tracking-wider">Share to</p>
+        <ShareButtons text={shareText} />
 
         <p className="text-[var(--text-subtle)] font-mono text-xs mt-4">Come back tomorrow for a new puzzle!</p>
       </div>

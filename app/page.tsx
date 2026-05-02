@@ -28,13 +28,13 @@ export default function Home() {
               <Keyboard />
             </div>
           </div>
-          <Toast />
           <WinModal />
           <LoseModal />
         </>
       ) : (
         <StartScreen />
       )}
+      <Toast />
     </main>
   );
 }

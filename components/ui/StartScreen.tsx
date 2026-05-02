@@ -1,6 +1,7 @@
 'use client';
 import { useGameStore } from '@/lib/store/gameStore';
 import ThemeToggle from './ThemeToggle';
+import ShareTrigger from './ShareTrigger';
 
 const GRID = 5;
 
@@ -9,7 +10,8 @@ export default function StartScreen() {
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-[80vh] w-full px-4">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <ShareTrigger />
         <ThemeToggle />
       </div>
       <div className="relative">
