@@ -24,6 +24,7 @@ interface GameState {
   toast: string | null;
   hasStarted: boolean;
   theme: Theme;
+  showHelp: boolean;
 }
 
 interface GameActions {
@@ -35,6 +36,7 @@ interface GameActions {
   loadGame: () => void;
   start: () => void;
   toggleTheme: () => void;
+  toggleHelp: () => void;
 }
 
 type GameStore = GameState & GameActions;
@@ -74,8 +76,11 @@ export const useGameStore = create<GameStore>()(
       toast: null,
       hasStarted: false,
       theme: 'dark',
+      showHelp: false,
 
       start: () => set({ hasStarted: true }),
+
+      toggleHelp: () => set((s) => ({ showHelp: !s.showHelp })),
 
       toggleTheme: () => {
         const next: Theme = get().theme === 'dark' ? 'light' : 'dark';

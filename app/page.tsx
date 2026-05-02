@@ -4,6 +4,7 @@ import { useGameStore } from '@/lib/store/gameStore';
 import Header from '@/components/ui/Header';
 import Toast from '@/components/ui/Toast';
 import StartScreen from '@/components/ui/StartScreen';
+import HowToPlay from '@/components/ui/HowToPlay';
 import GameBoard from '@/components/game/GameBoard';
 import Keyboard from '@/components/game/Keyboard';
 import WinModal from '@/components/modals/WinModal';
@@ -34,6 +35,7 @@ export default function Home() {
       ) : (
         <StartScreen />
       )}
+      <HowToPlay />
       <Toast />
     </main>
   );

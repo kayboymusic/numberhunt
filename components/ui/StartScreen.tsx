@@ -7,6 +7,7 @@ const GRID = 5;
 
 export default function StartScreen() {
   const start = useGameStore((s) => s.start);
+  const toggleHelp = useGameStore((s) => s.toggleHelp);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-[80vh] w-full px-4">
@@ -16,6 +17,27 @@ export default function StartScreen() {
       <div className="absolute top-4 right-4">
         <ShareTrigger />
       </div>
+
+      <button
+        onClick={toggleHelp}
+        className="
+          mb-4
+          font-mono font-semibold text-sm
+          text-[var(--text)] hover:text-black
+          bg-[var(--surface)] hover:bg-[#facc15]
+          border-2 border-black rounded-full
+          shadow-[3px_3px_0_0_#000]
+          px-4 py-1.5
+          active:[transform:translate(3px,3px)] active:shadow-[0_0_0_0_#000]
+          transition-colors duration-75
+          cursor-pointer
+          inline-flex items-center gap-2
+        "
+      >
+        How to play
+        <span aria-hidden className="font-bold">?</span>
+      </button>
+
       <div className="relative">
         <div
           className="grid border-[3px] border-black"
