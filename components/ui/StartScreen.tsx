@@ -10,9 +10,11 @@ export default function StartScreen() {
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-[80vh] w-full px-4">
-      <div className="absolute top-4 right-4 flex items-center gap-2">
-        <ShareTrigger />
+      <div className="absolute top-4 left-4">
         <ThemeToggle />
+      </div>
+      <div className="absolute top-4 right-4">
+        <ShareTrigger />
       </div>
       <div className="relative">
         <div

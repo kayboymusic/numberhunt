@@ -2,14 +2,8 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useGameStore } from '@/lib/store/gameStore';
-import { TileStatus } from '@/lib/engine/feedback';
+import { buildShareText } from '@/lib/utils/share';
 import ShareButtons from '@/components/ui/ShareButtons';
-
-const EMOJI: Record<TileStatus, string> = {
-  correct: '🟩',
-  present: '🟨',
-  absent: '⬛',
-};
 
 function celebrate() {
   const colors = [
@@ -58,22 +52,26 @@ function celebrate() {
 }
 
 export default function WinModal() {
-  const { gameStatus, guesses, statuses, streak, solution, mode } = useGameStore();
+  const { gameStatus, guesses, statuses, streak, solution, mode, date } = useGameStore();
   const hasWon = gameStatus === 'won';
 
   useEffect(() => {
     if (!hasWon) return;
+    const key = `numberhunt-celebrated-${date}-${mode}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, '1');
     return celebrate();
-  }, [hasWon]);
+  }, [hasWon, date, mode]);
 
   if (!hasWon) return null;
 
-  const shareText = [
-    `NumberHunt ${new Date().toLocaleDateString()} (${mode})`,
-    `${guesses.length}/6`,
-    '',
-    ...statuses.map((row) => row.map((s) => EMOJI[s]).join('')),
-  ].join('\n');
+  const shareText = buildShareText({
+    gameStatus,
+    mode,
+    guesses,
+    statuses,
+    origin: typeof window !== 'undefined' ? window.location.origin : '',
+  });
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-40 p-4">
