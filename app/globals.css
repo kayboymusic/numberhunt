@@ -56,16 +56,10 @@ body {
 
 /* Tile flip animation */
 .tile-container {
-  width: 52px;
-  height: 52px;
+  --tile-size: clamp(22px, calc((100vw - 24px - (var(--cols, 8) - 1) * 6px) / var(--cols, 8)), 58px);
+  width: var(--tile-size);
+  height: var(--tile-size);
   perspective: 250px;
-}
-
-@media (min-width: 640px) {
-  .tile-container {
-    width: 58px;
-    height: 58px;
-  }
 }
 
 .tile {
@@ -87,6 +81,7 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 4px;
+  font-size: clamp(13px, calc(var(--tile-size) * 0.55), 30px);
 }
 
 .tile-back {

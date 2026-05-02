@@ -54,9 +54,9 @@ export default function Keyboard() {
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-1.5 sm:gap-2 items-center w-full">
       {ROWS.map((row, ri) => (
-        <div key={ri} className="flex gap-1.5 justify-center">
+        <div key={ri} className="flex gap-1 sm:gap-1.5 justify-center w-full px-1">
           {row.map((key) => {
             const status = charStatus[key];
             const isWide = key === 'Enter' || key === '⌫';
@@ -68,7 +68,8 @@ export default function Keyboard() {
                   font-mono font-bold text-sm sm:text-base
                   rounded border
                   transition-all duration-150 active:scale-95
-                  ${isWide ? 'px-3 sm:px-4 py-4 text-xs sm:text-sm' : 'w-10 sm:w-12 py-4'}
+                  py-3 sm:py-4
+                  ${isWide ? 'px-2 sm:px-4 text-xs sm:text-sm flex-1 max-w-[64px] sm:max-w-none' : 'flex-1 max-w-[44px] sm:w-12 sm:max-w-none sm:flex-initial'}
                   ${status ? KEY_STYLES[status] : 'bg-[var(--key-default)] text-[var(--key-default-text)] border-[var(--key-default)] hover:bg-[var(--key-default-hover)]'}
                 `}
               >

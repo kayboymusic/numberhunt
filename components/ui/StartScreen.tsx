@@ -24,7 +24,8 @@ export default function StartScreen() {
           {Array.from({ length: GRID * GRID }).map((_, i) => (
             <div
               key={i}
-              className="w-[68px] h-[68px] sm:w-[76px] sm:h-[76px] bg-[#538d4e] border-[1.5px] border-black"
+              className="bg-[#538d4e] border-[1.5px] border-black aspect-square"
+              style={{ width: 'clamp(48px, calc((100vw - 40px) / 5), 76px)' }}
             />
           ))}
         </div>

@@ -18,7 +18,10 @@ export default function GameBoard() {
   });
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div
+      className="flex flex-col gap-1.5"
+      style={{ '--cols': cols } as React.CSSProperties}
+    >
       {rows.map((row, i) => (
         <GameRow key={i} guess={row.guess} statuses={row.statuses} isActive={row.isActive} length={cols} />
       ))}

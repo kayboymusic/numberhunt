@@ -31,7 +31,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text)] font-mono">
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text)] font-mono" suppressHydrationWarning>
         {children}
       </body>
     </html>
