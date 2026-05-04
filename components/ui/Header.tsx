@@ -2,6 +2,7 @@
 import { useGameStore } from '@/lib/store/gameStore';
 import ThemeToggle from './ThemeToggle';
 import ShareTrigger from './ShareTrigger';
+import ProfileAvatar from '@/components/auth/ProfileAvatar';
 
 export default function Header() {
   const { mode, setMode, toggleHelp } = useGameStore();
@@ -13,7 +14,10 @@ export default function Header() {
         <h1 className="text-xl sm:text-2xl font-bold tracking-[0.15em] text-[var(--text)] font-display whitespace-nowrap">
           NUMBERHUNT
         </h1>
-        <ShareTrigger />
+        <div className="flex items-center gap-2">
+          <ShareTrigger />
+          <ProfileAvatar />
+        </div>
       </div>
 
       <div className="flex justify-center items-center gap-2">

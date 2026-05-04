@@ -2,6 +2,7 @@
 import { useGameStore } from '@/lib/store/gameStore';
 import ThemeToggle from './ThemeToggle';
 import ShareTrigger from './ShareTrigger';
+import ProfileAvatar from '@/components/auth/ProfileAvatar';
 
 const GRID = 5;
 
@@ -14,8 +15,9 @@ export default function StartScreen() {
       <div className="absolute top-4 left-4">
         <ThemeToggle />
       </div>
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex items-center gap-2">
         <ShareTrigger />
+        <ProfileAvatar />
       </div>
 
       <button

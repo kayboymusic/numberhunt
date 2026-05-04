@@ -9,6 +9,7 @@ import puzzles from '../../data/puzzles.json';
 export type GameStatus = 'playing' | 'won' | 'lost';
 export type GameMode = 'easy' | 'hard';
 export type Theme = 'light' | 'dark';
+export type AuthMode = 'guest' | 'google';
 
 interface GameState {
   solution: string;
@@ -25,6 +26,10 @@ interface GameState {
   hasStarted: boolean;
   theme: Theme;
   showHelp: boolean;
+  authMode: AuthMode | null;
+  userImage: string | null;
+  userName: string | null;
+  showAuthModal: boolean;
 }
 
 interface GameActions {
@@ -37,6 +42,11 @@ interface GameActions {
   start: () => void;
   toggleTheme: () => void;
   toggleHelp: () => void;
+  openAuthModal: () => void;
+  closeAuthModal: () => void;
+  signInAsGuest: () => void;
+  setGoogleAuth: (image: string | null, name: string | null) => void;
+  signOut: () => void;
 }
 
 type GameStore = GameState & GameActions;
@@ -77,10 +87,50 @@ export const useGameStore = create<GameStore>()(
       hasStarted: false,
       theme: 'dark',
       showHelp: false,
+      authMode: null,
+      userImage: null,
+      userName: null,
+      showAuthModal: false,
 
-      start: () => set({ hasStarted: true }),
+      start: () => {
+        const { authMode } = get();
+        if (!authMode) {
+          set({ showAuthModal: true });
+          return;
+        }
+        set({ hasStarted: true });
+      },
 
       toggleHelp: () => set((s) => ({ showHelp: !s.showHelp })),
+
+      openAuthModal: () => set({ showAuthModal: true }),
+      closeAuthModal: () => set({ showAuthModal: false }),
+
+      signInAsGuest: () =>
+        set({
+          authMode: 'guest',
+          userImage: null,
+          userName: null,
+          showAuthModal: false,
+          hasStarted: true,
+        }),
+
+      setGoogleAuth: (image, name) =>
+        set({
+          authMode: 'google',
+          userImage: image,
+          userName: name,
+          showAuthModal: false,
+          hasStarted: true,
+        }),
+
+      signOut: () =>
+        set({
+          authMode: null,
+          userImage: null,
+          userName: null,
+          hasStarted: false,
+        }),
 
       toggleTheme: () => {
         const next: Theme = get().theme === 'dark' ? 'light' : 'dark';
@@ -206,7 +256,26 @@ export const useGameStore = create<GameStore>()(
         solution: state.solution,
         target: state.target,
         theme: state.theme,
+        authMode: state.authMode,
+        userImage: state.userImage,
+        userName: state.userName,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        // Guests only "stick" if they've made a guess today.
+        // Without an entry, we boot them back to the auth modal on every refresh.
+        const today = getTodayKey();
+        const hasEntryToday = state.date === today && state.guesses.length > 0;
+        if (state.authMode === 'guest' && !hasEntryToday) {
+          state.authMode = null;
+          state.userImage = null;
+          state.userName = null;
+          state.hasStarted = false;
+        } else if (state.authMode) {
+          // Authed (google, or guest with an entry) — skip start screen.
+          state.hasStarted = true;
+        }
+      },
     }
   )
 );
